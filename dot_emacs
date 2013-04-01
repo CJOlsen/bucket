@@ -1,0 +1,64 @@
+" caps lock and control keys are swapped on system startup, to change goto settings->session and startup "
+
+
+; move the scroll-bar to the right
+(set-scroll-bar-mode 'right)
+
+
+; maps C-x C-j to toggle syntax highlighting
+(global-set-key [?\C-x ?\C-j] 'global-font-lock-mode)
+
+; word wrapping
+;(setq longlines-wrap-follows-window-size t)
+
+; don't show the extra buffer on startup
+(setq inhibit-startup-message t)
+
+; show line and column numbers
+(setq line-number-mode t)
+(setq column-number-mode t)
+
+; turn on visual bell (and off audio bell)
+(setq visible-bell t)
+
+; turn off top menubar and toolbar
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+
+;(set-face-font 'default "fixed")
+
+
+(set-foreground-color "snow")
+(set-background-color "grey20")
+;(set-face-attribute 'default nil :font "Droid Sans Mono-10")
+
+;(add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-10"))
+
+;(set-face-attribute 'default (selected-frame) :height 100)
+;(set-default-font "2x4")
+;(setq default-frame-alist (append (list '(width  . 81)
+;					'(height . 40)
+;					default-frame-alist)))
+;
+
+
+;(add-to-list 'default-frame-alist (cons 'width 80))
+
+
+; set the window title
+(set-default 'frame-title-format (list "%b "
+				  " at " 
+				  "%f"))
+
+; tell emacs where the plugins are stored
+(add-to-list 'load-path "~/.emacs.d/plugins")
+
+; quack enhances scheme support
+;(require 'quack)
+
+;enables parenthesis closing behavior, tag closing uses C-c C-t
+;disabled (kind of awkward)
+;(add-to-list 'load-path "~/.emacs.d/plugins/emacs-textmate")
+;(require 'textmate)
+;(tm/initialize)
+
