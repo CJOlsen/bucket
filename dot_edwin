@@ -1,0 +1,6 @@
+((ref-command set-font) "9x15")
+((ref-command set-frame-size) 80 50) ;; width, height
+
+((ref-command set-background-color) "dimgray")
+((ref-command set-foreground-color) "snow")
+((ref-command set-cursor-color) "snow")
