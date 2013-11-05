@@ -1,15 +1,10 @@
-" caps lock and control keys are swapped on system startup, to change goto settings->session and startup "
+;; General
 
+;enable copying to the clipboard
+(setq x-select-enable-clipboard t)
 
 ; move the scroll-bar to the right
 (set-scroll-bar-mode 'right)
-
-
-; maps C-x C-j to toggle syntax highlighting
-(global-set-key [?\C-x ?\C-j] 'global-font-lock-mode)
-
-; word wrapping
-;(setq longlines-wrap-follows-window-size t)
 
 ; don't show the extra buffer on startup
 (setq inhibit-startup-message t)
@@ -22,43 +17,77 @@
 (setq visible-bell t)
 
 ; turn off top menubar and toolbar
-(menu-bar-mode -1)
+;(menu-bar-mode -1)
 (tool-bar-mode -1)
 
-;(set-face-font 'default "fixed")
+; increase font-size
+(set-face-attribute 'default nil :height 105)
 
+;(set-foreground-color "snow")
+;(set-background-color "grey20")
 
-(set-foreground-color "snow")
-(set-background-color "grey20")
-;(set-face-attribute 'default nil :font "Droid Sans Mono-10")
-
-;(add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-10"))
-
-;(set-face-attribute 'default (selected-frame) :height 100)
-;(set-default-font "2x4")
-;(setq default-frame-alist (append (list '(width  . 81)
-;					'(height . 40)
-;					default-frame-alist)))
-;
-
-
-;(add-to-list 'default-frame-alist (cons 'width 80))
-
-
-; set the window title
+; set the window title to "*file-name* at *file-path*"
 (set-default 'frame-title-format (list "%b "
-				  " at " 
-				  "%f"))
+				       " at " 
+				       "%f"))
+
+; make the ansi colors softer (for when using a shell)
+(setq ansi-color-names-vector
+      ["black" "red" "green" "yellow" "PaleBlue" "magenta" "cyan" "white"])
+
+; get color themes working (currently using solarized)
+(load-file "~/.emacs.d/emacs-color-theme-solarized/color-theme-solarized.el")
+(load-theme 'solarized-dark t)
+
+; a bunch of other color themes in here:
+;; (require 'color-theme)
+;; (color-theme-initialize)
+;; (color-theme-robin-hood)
 
 ; tell emacs where the plugins are stored
 (add-to-list 'load-path "~/.emacs.d/plugins")
+(require 'json-mode)
+(require 'clojure-mode)
+(require 'clojure-test-mode)
+(require 'nrepl)
+(require 'paredit)
+(require 'rainbow-delimiters)
 
-; quack enhances scheme support
-;(require 'quack)
+; turn on rainbow delimiters for all programming modes
+(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 
-;enables parenthesis closing behavior, tag closing uses C-c C-t
-;disabled (kind of awkward)
-;(add-to-list 'load-path "~/.emacs.d/plugins/emacs-textmate")
-;(require 'textmate)
-;(tm/initialize)
 
+;; Language Specific
+
+; Python
+(setq python-shell-interpreter "/usr/bin/python2.7")
+
+; Clojure
+(autoload 'enable-paredit-mode "paredit"
+  "Turn on pseudo-structural editing of Lisp code."
+  t)
+
+(add-hook 'clojure-mode-hook #'enable-paredit-mode)
+(paredit-mode t)
+
+(setq inferior-lisp-program "/usr/bin/lein repl")
+
+(add-hook 'clojure-mode-hook
+	  '(lambda ()
+	     (define-key clojure-mode-map
+	       "\C-c\C-e" '(lambda ()
+			     (interactive)
+			     (let ((curr (point)))
+			       (end-of-defun)
+			       (lisp-eval-last-sexp)
+			       (goto-char curr))))
+	     (define-key clojure-mode-map
+	       "\C-x\C-e" 'lisp-eval-last-sexp)
+	     (define-key clojure mode-map
+	       "\C-c\C-r" 'list-eval-region)
+	     (define-key 'clojure-mode-map
+	       "\C-c\C-c" '(lambda ()
+			     (interactive)
+			     (list-eval-string (buffer-string))))
+	     (define-key clojure-mode-map
+	       "\C-c\C-z" 'run-lisp)))
