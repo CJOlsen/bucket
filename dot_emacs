@@ -23,6 +23,9 @@
 ; increase font-size
 (set-face-attribute 'default nil :height 105)
 
+; increase frame size
+(add-to-list 'default-frame-alist '(height . 45))
+
 ;(set-foreground-color "snow")
 ;(set-background-color "grey20")
 
@@ -31,9 +34,15 @@
 				       " at " 
 				       "%f"))
 
+;; add project tree navigation
+(add-to-list 'load-path "~/.emacs.d/emacs-nav-49")
+(require 'nav)
+(nav-disable-overeager-window-splitting)
+
+
 ; make the ansi colors softer (for when using a shell)
-(setq ansi-color-names-vector
-      ["black" "red" "green" "yellow" "PaleBlue" "magenta" "cyan" "white"])
+;(setq ansi-color-names-vector
+;      ["black" "red" "green" "yellow" "PaleBlue" "magenta" "cyan" "white"])
 
 ; get color themes working (currently using solarized)
 (load-file "~/.emacs.d/emacs-color-theme-solarized/color-theme-solarized.el")
@@ -52,10 +61,22 @@
 (require 'nrepl)
 (require 'paredit)
 (require 'rainbow-delimiters)
+(require 'autopair)
 
 ; turn on rainbow delimiters for all programming modes
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 
+; turn on autopair to auto-close braces and quotes
+(autopair-global-mode)
+
+; auto-generate closing braces and quotes (doesn't enforce like paredit-mode)
+; autopair has some holes, may not be worth the auto-delete function
+;; (setq skeleton-pair t)
+;; (global-set-key "(" 'skeleton-pair-insert-maybe)
+;; (global-set-key "[" 'skeleton-pair-insert-maybe)
+;; (global-set-key "{" 'skeleton-pair-insert-maybe)
+;; (global-set-key "\"" 'skeleton-pair-insert-maybe)
+;; (global-set-key "<" 'skeleton-pair-insert-maybe)
 
 ;; Language Specific
 
@@ -63,12 +84,12 @@
 (setq python-shell-interpreter "/usr/bin/python2.7")
 
 ; Clojure
-(autoload 'enable-paredit-mode "paredit"
-  "Turn on pseudo-structural editing of Lisp code."
-  t)
 
-(add-hook 'clojure-mode-hook #'enable-paredit-mode)
-(paredit-mode t)
+;; (autoload 'enable-paredit-mode "paredit"
+;;   "Turn on pseudo-structural editing of Lisp code."
+;;   t)
+;; (add-hook 'clojure-mode-hook #'enable-paredit-mode)
+;; (paredit-mode t)
 
 (setq inferior-lisp-program "/usr/bin/lein repl")
 
